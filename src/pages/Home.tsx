@@ -26,8 +26,8 @@ const Home: React.FC = () => {
     const result = await fetch("https://beta.pokeapi.co/graphql/v1beta", {
       method: "POST",
       body: JSON.stringify({
-        query: `query getItems{pokemon_v2_pokemon(limit: 4, offset:`  + i*4 + 
-        `){height, base_experience, name, pokemon_v2_pokemonabilities {pokemon_v2_ability {name}}, weight}
+        query: `query getItems{pokemon_v2_pokemon(limit: 8, offset:`  + i*8 + 
+        `){id, height, base_experience, name, pokemon_v2_pokemonabilities {pokemon_v2_ability {name}}, weight}
         }
           `
         , variables: null,
@@ -83,6 +83,15 @@ const Home: React.FC = () => {
           onIonSlideNextStart={() => ionSlideNextStart()}
           ref={slidesRef}
         >
+          <IonSlide>
+            <CardContainer></CardContainer>
+          </IonSlide>
+          <IonSlide>
+            <CardContainer></CardContainer>
+          </IonSlide>
+          <IonSlide>
+            <CardContainer></CardContainer>
+          </IonSlide>
           <IonSlide>
             <CardContainer></CardContainer>
           </IonSlide>

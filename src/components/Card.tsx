@@ -9,8 +9,11 @@ import {
   } from '@ionic/react';
   import { useRef } from 'react';
 
+  type CardProperties = {
+    card: Object
+  }
   
-  const Card: React.FC = () => {
+  const Card: React.FC<CardProperties> = (card) => {
     const slidesRef = useRef<HTMLIonSlidesElement>(null);
   
     const options = {
