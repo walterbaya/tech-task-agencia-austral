@@ -1,74 +1,46 @@
-import { 
-    IonContent, 
-    IonHeader, 
-    IonPage, 
-    IonTitle, 
-    IonToolbar,
-    IonSlides,
-    IonSlide
-  } from '@ionic/react';
-  import { useRef } from 'react';
+import {
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonList,
+  IonLabel,
+  IonCardContent,
+} from '@ionic/react';
+import CardUtil from '../util/CardUtil';
+import "./Card.css";
 
-  type CardProperties = {
-    card: Object
-  }
-  
-  const Card: React.FC<CardProperties> = (card) => {
-    const slidesRef = useRef<HTMLIonSlidesElement>(null);
-  
-    const options = {
-      keyboard: true
-    };
-    
-    const slideWillChange = () => {
-      console.log('Slide will change');
-    }
-    
-    const slideDidChange = async () => {
-      console.log('Slide did change');
-      
-      if (!slidesRef.current) return;
-      
-      console.table({
-        isBeginning: await slidesRef.current.isBeginning(),
-        isEnd: await slidesRef.current.isEnd()
-      });
-    }
-  
-    return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen>
-          <IonHeader collapse="condense">
-            <IonToolbar>
-              <IonTitle size="large">Blank</IonTitle>
-            </IonToolbar>         
-          </IonHeader>
-          
-          <IonSlides
-            pager={true}
-            scrollbar={true}
-            options={options}
-            
-            onIonSlideWillChange={() => slideWillChange()}
-            onIonSlideDidChange={() => slideDidChange()}
-            
-            ref={slidesRef}
-          >
-            <IonSlide>Slide 1</IonSlide>
-            <IonSlide>Slide 2</IonSlide>
-            <IonSlide>Slide 3</IonSlide>
-            <IonSlide>Slide 4</IonSlide>
-            <IonSlide>Slide 5</IonSlide>
-          </IonSlides>
-        </IonContent>
-      </IonPage>
-    );
-  };
-  
-  export default Card;
-  
+const Card: React.FC<CardUtil> = (card) => {
+
+  return (
+    <IonContent>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle color="primary">{(card.name).toUpperCase()}</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <IonList>
+            <IonItem>
+              <div className="pokemon-info"><IonLabel>Weight:</IonLabel><span className='ion-margin-start'>{card.weight}</span></div>
+            </IonItem>
+            <IonItem>
+              <div className="pokemon-info"><IonLabel>Height:</IonLabel><span className='ion-margin-start'>{card.height}</span></div>
+            </IonItem>
+            <IonItem>
+              <div className="pokemon-info"><IonLabel>Experience:</IonLabel><span className='ion-margin-start'>{card.base_experience}</span></div>
+            </IonItem>
+          </IonList>
+          <IonList className="overflow-scroll">
+            <IonItem color="primary">ABILITIES</IonItem>
+            {card.pokemon_v2_pokemonabilities.map(function (abilitie, index) {
+              return (<IonItem key={index} color="light">{abilitie.pokemon_v2_ability.name}</IonItem>)
+            })}
+          </IonList>
+        </IonCardContent>
+      </IonCard>
+    </IonContent>
+  );
+};
+
+export default Card;

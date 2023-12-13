@@ -10,24 +10,24 @@ import {
 import { useRef, useState, useEffect } from "react";
 import "./Home.css";
 import CardContainer from "../components/CardContainer";
+import CardUtil from "../util/CardUtil";
+
 
 const Home: React.FC = () => {
   var slidesRef = useRef<HTMLIonSlidesElement>(null);
-  var [page, setPage]= useState(1);
-  var [pokemones, setPokemones] = useState({});
+  var [page, setPage] = useState(1);
+  var [pokemones, setPokemones] = useState(Array<CardUtil>());
 
   useEffect(() => {
-    fetchPokemons(page).then(response => console.log(response))
-    //setPokemones();
-    console.log(pokemones)
+    fetchPokemons(page).then(response => setPokemones(response.data.pokemon_v2_pokemon))
   }, [])
 
   async function fetchPokemons(i: number) {
     const result = await fetch("https://beta.pokeapi.co/graphql/v1beta", {
       method: "POST",
       body: JSON.stringify({
-        query: `query getItems{pokemon_v2_pokemon(limit: 8, offset:`  + i*8 + 
-        `){id, height, base_experience, name, pokemon_v2_pokemonabilities {pokemon_v2_ability {name}}, weight}
+        query: `query getItems{pokemon_v2_pokemon(limit: 4, offset:` + i * 4 +
+          `){id, height, base_experience, name, pokemon_v2_pokemonabilities {pokemon_v2_ability {name}}, weight}
         }
           `
         , variables: null,
@@ -43,9 +43,10 @@ const Home: React.FC = () => {
   };
 
   const ionSlideNextStart = () => {
-    fetchPokemons(page + 1).then(response => console.log(response))
-    //setPokemones();
-    console.log(pokemones)
+    fetchPokemons(page + 1).then(response => {
+      setPokemones(response.data.pokemon_v2_pokemon);
+      console.log(response.data.pokemon_v2_pokemon);
+    })
     console.log("NEXT");
     setPage(page + 1);
   };
@@ -60,6 +61,17 @@ const Home: React.FC = () => {
       isEnd: await slidesRef.current.isEnd(),
     });
   };
+
+  function renderPokemones() {
+    if (pokemones.length > 0) {
+      return (<CardContainer cards={pokemones}></CardContainer>);
+    }
+    else {
+      return (<div>Hello</div>);
+    }
+  }
+
+
 
   return (
     <IonPage>
@@ -83,22 +95,18 @@ const Home: React.FC = () => {
           onIonSlideNextStart={() => ionSlideNextStart()}
           ref={slidesRef}
         >
-          <IonSlide>
-            <CardContainer></CardContainer>
-          </IonSlide>
-          <IonSlide>
-            <CardContainer></CardContainer>
-          </IonSlide>
-          <IonSlide>
-            <CardContainer></CardContainer>
-          </IonSlide>
-          <IonSlide>
-            <CardContainer></CardContainer>
-          </IonSlide>
-          <IonSlide>
-            <CardContainer></CardContainer>
-          </IonSlide>
 
+          <IonSlide>
+            {
+              renderPokemones()
+            }
+          </IonSlide>
+          <IonSlide>
+
+          </IonSlide>
+          <IonSlide>
+
+          </IonSlide>
         </IonSlides>
       </IonContent>
     </IonPage>

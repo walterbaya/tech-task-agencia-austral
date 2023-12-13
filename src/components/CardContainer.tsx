@@ -3,26 +3,25 @@ import {
 } from '@ionic/react';
 
 import Card from './Card';
+import CardUtil from '../util/CardUtil';
 import React from "react";
+import "./CardContainer.css";
 
-type Card = {
-    id: string
-}
+
+
 type CardContainerProps = {
-    cards: Array<Card>
+    cards: Array<CardUtil>
 }
 
 const CardContainer: React.FC<CardContainerProps> = (props) => {
     return (
         <IonGrid>
             <IonRow>
-                {props.cards.map(card => {
-                    return (
-
-                        <IonCol key={card.id}>
-                            <Card card={card}></Card>
-                        </IonCol>
-                    );
+                {
+                props.cards.map(function (card) {
+                    return(<IonCol size="6" key={card.id}>
+                        <Card {...card}></Card>
+                    </IonCol>);
                 })}
             </IonRow>
         </IonGrid>

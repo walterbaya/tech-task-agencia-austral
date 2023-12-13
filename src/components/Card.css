@@ -1,0 +1,18 @@
+.pokemon-info{
+    display: flex;
+    flex-direction: row;
+}
+
+ion-card-content{
+    display: flex;
+    flex-direction: row;    
+}
+
+ion-list{
+    width: 50%;
+}
+
+.overflow-scroll{
+    height: 50%; 
+    overflow-y: auto;
+}
