@@ -15,12 +15,10 @@ import CardUtil from "../util/CardUtil";
 
 const Home: React.FC = () => {
   var slidesRef = useRef<HTMLIonSlidesElement>(null);
-  var [page, setPage] = useState(1);
+  var [page, setPage] = useState(0);
+  var [start, setStart] = useState(true);
+  var [maxPage, setMaxPage] = useState(2);
   var [pokemones, setPokemones] = useState(Array<CardUtil>());
-
-  useEffect(() => {
-    fetchPokemons(page).then(response => setPokemones(response.data.pokemon_v2_pokemon))
-  }, [])
 
   async function fetchPokemons(i: number) {
     const result = await fetch("https://beta.pokeapi.co/graphql/v1beta", {
@@ -38,33 +36,53 @@ const Home: React.FC = () => {
     return await result.json();
   }
 
+  async function fetchStartPokemons() {
+    const result = await fetch("https://beta.pokeapi.co/graphql/v1beta", {
+      method: "POST",
+      body: JSON.stringify({
+        query: `query getItems{pokemon_v2_pokemon(limit: 12){id, height, base_experience, name, pokemon_v2_pokemonabilities {pokemon_v2_ability {name}}, weight}
+        }
+          `
+        , variables: null,
+        operationName: "getItems",
+      }),
+    });
+
+    return await result.json();
+  }
+
+
   const options = {
     keyboard: true,
+    initialSlide: 1
   };
 
   const ionSlideNextStart = () => {
-    fetchPokemons(page + 1).then(response => {
-      setPokemones(response.data.pokemon_v2_pokemon);
-      console.log(response.data.pokemon_v2_pokemon);
-    })
-    console.log("NEXT");
+    if (start) {
+      fetchStartPokemons().then(response => setPokemones(response.data.pokemon_v2_pokemon)).then()
+      setStart(false)
+    }
+
+    if (page + 1 > maxPage) {
+      setMaxPage(page + 1);
+      fetchPokemons(page + 1).then(response => setPokemones([...pokemones, ...response.data.pokemon_v2_pokemon]))
+      console.log("adentro")
+    }
     setPage(page + 1);
+    console.log(page + 1)
+    
   };
 
   const ionSlidePrevStart = async () => {
-    console.log("PREV");
-
     if (!slidesRef.current) return;
-
-    console.table({
-      isBeginning: await slidesRef.current.isBeginning(),
-      isEnd: await slidesRef.current.isEnd(),
-    });
+    setPage(page - 1);
+    console.log(page - 1)
   };
 
-  function renderPokemones() {
+  function renderPokemones(i: number) {
+    console.log(pokemones)
     if (pokemones.length > 0) {
-      return (<CardContainer cards={pokemones}></CardContainer>);
+      return (<CardContainer cards={pokemones.slice(4 * i, 4 * (i + 1))}></CardContainer>);
     }
     else {
       return (<div>Hello</div>);
@@ -96,17 +114,9 @@ const Home: React.FC = () => {
           ref={slidesRef}
         >
 
-          <IonSlide>
-            {
-              renderPokemones()
-            }
-          </IonSlide>
-          <IonSlide>
-
-          </IonSlide>
-          <IonSlide>
-
-          </IonSlide>
+          <IonSlide>{ renderPokemones(0)}</IonSlide>
+          <IonSlide>{ renderPokemones(1)}</IonSlide>
+          <IonSlide>{ renderPokemones(2)}</IonSlide>
         </IonSlides>
       </IonContent>
     </IonPage>
