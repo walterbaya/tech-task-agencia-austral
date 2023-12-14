@@ -6,8 +6,9 @@ import {
   IonToolbar,
   IonSlides,
   IonSlide,
+  IonImg
 } from "@ionic/react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import "./Home.css";
 import CardContainer from "../components/CardContainer";
 import CardUtil from "../util/CardUtil";
@@ -15,7 +16,7 @@ import CardUtil from "../util/CardUtil";
 
 const Home: React.FC = () => {
   var slidesRef = useRef<HTMLIonSlidesElement>(null);
-  var [page, setPage] = useState(0);
+  var [page, setPage] = useState(1);
   var [start, setStart] = useState(true);
   var [maxPage, setMaxPage] = useState(2);
   var [pokemones, setPokemones] = useState(Array<CardUtil>());
@@ -59,18 +60,19 @@ const Home: React.FC = () => {
 
   const ionSlideNextStart = () => {
     if (start) {
-      fetchStartPokemons().then(response => setPokemones(response.data.pokemon_v2_pokemon)).then()
+      fetchStartPokemons().then(response => setPokemones(response.data.pokemon_v2_pokemon));
       setStart(false)
     }
 
+    console.log("page: " + page)
+    console.log("max page: " + maxPage)
     if (page + 1 > maxPage) {
       setMaxPage(page + 1);
+      console.log(page + 1);
       fetchPokemons(page + 1).then(response => setPokemones([...pokemones, ...response.data.pokemon_v2_pokemon]))
       console.log("adentro")
     }
     setPage(page + 1);
-    console.log(page + 1)
-    
   };
 
   const ionSlidePrevStart = async () => {
@@ -85,7 +87,9 @@ const Home: React.FC = () => {
       return (<CardContainer cards={pokemones.slice(4 * i, 4 * (i + 1))}></CardContainer>);
     }
     else {
-      return (<div>Hello</div>);
+      return (<IonImg
+        src={"https://img.asmedia.epimg.net/resizer/_TyfVCp7FP9qSViihhEUowa5cqE=/1472x828/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/F3XL5IROZBOF5JNTKQB6QPQQ7Y.jpg"}
+      ></IonImg>);
     }
   }
 
@@ -113,10 +117,13 @@ const Home: React.FC = () => {
           onIonSlideNextStart={() => ionSlideNextStart()}
           ref={slidesRef}
         >
-
-          <IonSlide>{ renderPokemones(0)}</IonSlide>
-          <IonSlide>{ renderPokemones(1)}</IonSlide>
-          <IonSlide>{ renderPokemones(2)}</IonSlide>
+          {
+            Array.from({ length: maxPage + 1}, (_, index) => index)
+              .map(
+                function (i) {
+                  return (<IonSlide key={i}>{renderPokemones(i)}</IonSlide>)
+                })
+          }
         </IonSlides>
       </IonContent>
     </IonPage>
