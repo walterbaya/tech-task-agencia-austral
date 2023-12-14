@@ -17,7 +17,7 @@ const Card: React.FC<CardUtil> = (card) => {
     <IonContent>
       <IonCard>
         <IonCardHeader>
-          <IonCardTitle color="primary">{(card.name).toUpperCase()}</IonCardTitle>
+          <IonCardTitle color="tertiary">{(card.name).toUpperCase()}</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
           <IonList>
@@ -34,7 +34,9 @@ const Card: React.FC<CardUtil> = (card) => {
           <IonList className="overflow-scroll">
             <IonItem color="primary">ABILITIES</IonItem>
             {card.pokemon_v2_pokemonabilities.map(function (abilitie, index) {
-              return (<IonItem key={index} color="light">{abilitie.pokemon_v2_ability.name}</IonItem>)
+              return (<IonItem key={index} color="light">{abilitie.pokemon_v2_ability.name.split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ')}</IonItem>)
             })}
           </IonList>
         </IonCardContent>

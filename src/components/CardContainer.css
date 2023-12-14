@@ -5,3 +5,7 @@ ion-grid {
   height: 100%;
 }
 
+ion-col{
+  padding: 1.5em;
+}
+
