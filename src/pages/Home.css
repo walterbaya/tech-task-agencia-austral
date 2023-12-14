@@ -1,7 +1,23 @@
 ion-slides {
-  height:100%;
-  
+  height: 100%;
+
   --bullet-background: rgb(var(--ion-color-primary-rgb), 0.5);
   --bullet-background-active: var(--ion-color-primary);
   --scroll-bar-background: var(--ion-color-light);
+
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeLei6PSHV63Z5BWBDhBhHN1sMs1Uvcr65RA&usqp=CAU");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 20% auto;
+}
+
+.toolbarContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: start !important;
+}
+
+img {
+  padding: 0.5em;
 }

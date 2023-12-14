@@ -99,13 +99,16 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <div className="toolbarContainer">
+            <IonTitle>Find your Pokemons</IonTitle>
+            <img src='https://i.pinimg.com/564x/15/49/be/1549be29588e611b9614b0c7fdbb2ea2.jpg' height='60' width='60'></img>
+          </div>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle>Find your Pokemons</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -118,7 +121,7 @@ const Home: React.FC = () => {
           ref={slidesRef}
         >
           {
-            Array.from({ length: maxPage + 1}, (_, index) => index)
+            Array.from({ length: maxPage + 1 }, (_, index) => index)
               .map(
                 function (i) {
                   return (<IonSlide key={i}>{renderPokemones(i)}</IonSlide>)
